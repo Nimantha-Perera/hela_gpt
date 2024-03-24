@@ -66,6 +66,32 @@ export default function ChatView() {
     }
   };
 
+  // const translateText = async (text) => {
+  //   const options = {
+  //     method: 'POST',
+  //     url: 'https://microsoft-translator-text.p.rapidapi.com/BreakSentence',
+  //     params: {
+  //       'api-version': '3.0'
+  //     },
+  //     headers: {
+  //       'content-type': 'application/json',
+  //       'X-RapidAPI-Key': 'b52b12a177msh6af0189d06ce120p1cf2d0jsn651f854c0b57',
+  //       'X-RapidAPI-Host': 'microsoft-translator-text.p.rapidapi.com'
+  //     },
+  //     data: [
+  //       {
+  //         Text: text
+  //       }
+  //     ]
+  //   };
+    
+  //   try {
+  //     const response = await axios.request(options);
+  //     console.log(response.data);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // }
   const renderFormattedText = (text) => {
     // Split text into chunks based on formatting markers
     const chunks = text.split(/(\*\*|\*|\`\`\`)/g);
