@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { auth } from "../../firebase";
 import {
@@ -8,7 +8,6 @@ import {
   MDBCol,
   MDBCard,
   MDBCardBody,
-  MDBWelcome,
   MDBBtn,
 } from "mdb-react-ui-kit";
 import ChatView from "./ChatView";
@@ -30,12 +29,27 @@ export default function Home() {
   };
 
   return (
-    <MDBContainer>
-      <h1>Welcome, {displayName}</h1>
+    <div>
+      
+    <MDBContainer className="d-flex flex-column justify-content-start align-items-center">
+      <div className="text-center mb-4">
+        <h1 className="display-4">Hela GPT</h1>
+        <p className="lead">Welcome, {displayName}</p>
+      </div>
 
-       <ChatView />
+ 
+
+      <MDBRow className="mt-4">
+        <MDBCol>
+          <MDBCard>
+            <MDBCardBody>
+              <MDBBtn onClick={handleLogout}>Logout</MDBBtn>
+            </MDBCardBody>
+          </MDBCard>
+        </MDBCol>
+      </MDBRow>
     </MDBContainer>
-
-   
+    <ChatView />
+    </div>
   );
 }
