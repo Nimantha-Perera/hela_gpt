@@ -47,7 +47,7 @@
   }
   
   .user-message {
-    background-color: #007bff;
+    background-color: #575757;
     color: #fff;
     padding: 10px;
     border-radius: 10px;
@@ -60,6 +60,9 @@
     color: #000;
     padding: 10px;
     border-radius: 10px;
+    justify-content: end;
+   
     margin-bottom: 5px;
   }
+  
   

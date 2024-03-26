@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useRef } from 'react';
 import './ChatView.css'; // Import CSS file for styling
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
@@ -7,6 +7,28 @@ export default function ChatView() {
   const [messagesList, setMessagesList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [chat, setChat] = useState(null); // Declare chat variable
+  const [rows, setRows] = useState(1); // State to manage the number of rows
+  const textareaRef = useRef(null);
+  const [isTyping, setIsTyping] = useState(false);
+
+  const typingTimeoutRef = useRef(null); // Ref to hold typing timeout
+
+  const handleTextareaKeyDown = (event) => {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      handleSendMessage();
+    } else if (event.key === 'Enter' && event.shiftKey) {
+      setRows(rows + 1);
+    } else {
+      // User is typing, set typing indicator
+ 
+      // Reset typing indicator timeout
+      clearTimeout(typingTimeoutRef.current);
+      // Set typing indicator to false after 1500ms (1.5 seconds)
+      typingTimeoutRef.current = setTimeout(() => setIsTyping(false), 1500);
+    }
+  };
+
 
   const API_KEY = 'AIzaSyC6I358RmUE_IErdz9VnwKZjbJQIukHgsI'; // Replace with your actual API key
   const MODEL_NAME = 'gemini-1.0-pro'; // You can choose a different model if needed
@@ -49,22 +71,27 @@ export default function ChatView() {
     setMessagesList([...messagesList, newMessage]);
     setMessage('');
     setIsLoading(true);
+  
 
     try {
       if (chat) { // Check if chat is defined
+        const message = newMessage.text;
+        setIsTyping(true);
         const result = await chat.sendMessage(message);
         const response = result.response;
-        const botMessage = { text: response.text(), sender: 'bot' };
+        const botMessage = { text: response.text(), sender: 'bot', align: 'right' }; // Add align property
+        setIsTyping(false);
         setMessagesList([...messagesList, newMessage, botMessage]);
       }
     } catch (error) {
       console.error('Error:', error);
-      const botMessage = { text: 'An error occurred. Please try again.', sender: 'bot' };
+      const botMessage = { text: 'An error occurred. Please try again.', sender: 'bot', align: 'right' }; // Add align property
       setMessagesList([...messagesList, newMessage, botMessage]);
     } finally {
       setIsLoading(false);
     }
   };
+
 
   // const translateText = async (text) => {
   //   const options = {
@@ -103,14 +130,15 @@ export default function ChatView() {
   
     // Map chunks to JSX elements with appropriate formatting
     return chunks.map((chunk, index) => {
-      if (chunk === '**') {
-        return <b key={index}>{chunks[index + 1]}</b>;
+      if (chunk.startsWith('**')) {
+ 
+        return <b key={index}>{chunks[index + 0]}</b>;
       } else if (chunk === '*') {
-        return <i key={index}>{chunks[index + 1]}</i>;
+        return <i key={index}>{chunks[index + 0]}</i>;
       } else if (chunk === '```') {
         return (
           <div key={index} style={{ position: 'relative' }}>
-            <pre style={{ backgroundColor: 'lightgray' }}>{chunks[index + 1]}</pre>
+            <pre style={{ backgroundColor: 'black', color: "white" }}>{chunks[index + 1]}</pre>
             <button
               onClick={() => copyToClipboard(chunks[index + 1])}
               style={{
@@ -141,6 +169,7 @@ export default function ChatView() {
         );
       }
     });
+    
   };
   
   
@@ -153,19 +182,23 @@ export default function ChatView() {
             {renderFormattedText(msg.text)}
           </div>
         ))}
+         {isTyping && <div className="other-message" style={{ textAlign: 'center' ,color:"white"}}>Typing...</div>}
       </div>
       <div className="input-container">
-        <input
-          type="text"
-          className="message-input"
-          placeholder="Type your message..."
-          value={message}
-          onChange={(event) => setMessage(event.target.value)}
-        />
-        <button className="send-btn" onClick={handleSendMessage} disabled={isLoading}>
-          {isLoading ? 'Sending...' : 'Send'}
-        </button>
-      </div>
+      <textarea
+        className="message-input"
+        placeholder="Type your message..."
+        value={message}
+        onChange={(event) => setMessage(event.target.value)}
+        onKeyDown={handleTextareaKeyDown}
+        rows={rows} // Dynamically set the number of rows
+        ref={textareaRef}
+      />
+      <button className="send-btn" onClick={handleSendMessage} disabled={isLoading}>
+        {isLoading ? 'Sending...' : 'Send'}
+      </button>
+    </div>
+
     </div>
   );
 }

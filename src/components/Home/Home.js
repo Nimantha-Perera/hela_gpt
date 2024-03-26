@@ -31,7 +31,7 @@ export default function Home() {
   return (
     <div>
       
-    <MDBContainer className="d-flex flex-column justify-content-start align-items-center">
+    <MDBContainer className="d-flex flex-column justify-content-start align-items-center mt-5">
       <div className="text-center mb-4">
         <h1 className="display-4">Hela GPT</h1>
         <p className="lead">Welcome, {displayName}</p>
@@ -39,17 +39,17 @@ export default function Home() {
 
  
 
-      <MDBRow className="mt-4">
-        <MDBCol>
-          <MDBCard>
-            <MDBCardBody>
-              <MDBBtn onClick={handleLogout}>Logout</MDBBtn>
-            </MDBCardBody>
-          </MDBCard>
-        </MDBCol>
-      </MDBRow>
+    
+        
+             
+         
+  
     </MDBContainer>
+    <MDBContainer>
     <ChatView />
+    <MDBBtn style={{ marginTop: "20px" ,float:"right"}} onClick={handleLogout}>Logout</MDBBtn>
+    </MDBContainer>
+    
     </div>
   );
 }
