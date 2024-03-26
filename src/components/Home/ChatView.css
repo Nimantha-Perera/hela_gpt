@@ -64,5 +64,18 @@
    
     margin-bottom: 5px;
   }
+
+  .code-block {
+    font-family: monospace;
+    background-color: #303030; /* Background color for code block */
+    color: #ffffff; /* Text color for code block */
+    padding: 0.5rem; /* Padding for code block */
+    border-radius: 0.5rem; /* Border radius for code block */
+    display: inline-block; /* Ensure inline display */
+    border: 1px solid #ccc; /* Border style for code block */
+    margin-left: 2rem; /* Adjust margin left to make space for the button */
+    width: 100%;
+  }
+  
   
   
